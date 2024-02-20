@@ -149,7 +149,9 @@ var checkForBlackjack = function (handArray) {
 // function that calculates a hand
 var calculateTotalHandValue = function (handArray) {
   var totalHandValue = 0;
-  var aceCounter = 0;
+
+  //maybe we use boolean?
+  var hasAce = false;
 
   // loop through player or dealer hand and add up the values
   var index = 0;
@@ -158,26 +160,25 @@ var calculateTotalHandValue = function (handArray) {
 
     // for jack, queen, king, value is 10
     if (
-      currentCard.name == "jack" ||
-      currentCard.name == "queen" ||
-      currentCard.name == "king"
+      // maybe we use === and the true value to compare to be safer
+      currentCard.name === "Jack" ||
+      currentCard.name === "Queen" ||
+      currentCard.name === "King"
     ) {
       totalHandValue = totalHandValue + 10;
-    } else if (currentCard.name == "ace") {
+    } else if (currentCard.name === "Ace") {
+      hasAce = true;
       totalHandValue = totalHandValue + 11;
-      aceCounter = aceCounter + 1;
     } else {
       totalHandValue = totalHandValue + currentCard.rank;
     }
     index = index + 1;
   }
 
-  index = 0;
-  while (index < aceCounter) {
-    if (totalHandValue > 21) {
-      totalHandValue = totalHandValue - 10;
-    }
-    index = index + 1;
+  // did we explode? do we have ace if we did explode?
+  if (totalHandValue > 21 && hasAce) {
+    totalHandValue = totalHandValue - 10;
+  // we only care about one ace, we dont have to check other aces, so we dont use while loop
   }
 
   return totalHandValue;
